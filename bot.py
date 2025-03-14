@@ -1,5 +1,26 @@
 import os
 import time
+from selenium import webdriver
+
+USERNAME = os.getenv("INSTAGRAM_USERNAME")
+PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
+
+# باقي الدوال والشفرة
+def setup_browser():
+    pass
+
+def login_instagram(driver):
+    # تستخدم USERNAME و PASSWORD من المجال العام
+    pass
+
+if __name__ == "__main__":
+    if not USERNAME or not PASSWORD:
+        raise ValueError("⚠️ يجب تعريف INSTAGRAM_USERNAME و INSTAGRAM_PASSWORD في متغيرات البيئة!")
+
+    driver = setup_browser()
+    login_instagram(driver)
+import os
+import time
 
 # استيراد Selenium
 from selenium import webdriver
