@@ -30,6 +30,9 @@ install_chrome()
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 def setup_browser():
     """إعداد متصفح Chrome داخل Railway"""
@@ -42,15 +45,6 @@ def setup_browser():
 
     driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
     return driver
-    options = webdriver.ChromeOptions()
-    options.binary_location = "/usr/bin/chromium-browser"  # تحديد موقع Chrome داخل بيئة Railway
-    options.add_argument("--headless")  # تشغيل بدون واجهة مرئية
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")  # تفادي مشاكل استهلاك الذاكرة
-    driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
-    return driver
-
 # تسجيل الدخول إلى إنستغرام
 def login_instagram(driver, username, password):
     driver.get("https://www.instagram.com/accounts/login/")
