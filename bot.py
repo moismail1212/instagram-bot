@@ -6,22 +6,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from keep_alive import keep_alive  # تشغيل `keep_alive.py` لمنع التوقف
 
 # تشغيل السيرفر للحفاظ على البوت شغالًا
 keep_alive()
 
-# تثبيت Google Chrome و ChromeDriver في بيئة Railway
+# تثبيت Google Chrome و ChromeDriver يدويًا
 def install_chrome():
     """تثبيت Google Chrome و ChromeDriver داخل Railway"""
-    subprocess.run("apt update", shell=True)
+    subprocess.run("apt update -y", shell=True)
+    subprocess.run("apt install -y chromium-browser", shell=True)
     subprocess.run("apt install -y chromium-chromedriver", shell=True)
     print("✅ تم تثبيت Google Chrome و ChromeDriver بنجاح!")
 
 install_chrome()
 
-# إعداد متصفح Chrome لـ Selenium
+# إعداد Selenium لاستخدام ChromeDriver الصحيح
 def setup_browser():
     """إعداد متصفح Chrome داخل Railway"""
     options = Options()
@@ -31,8 +31,10 @@ def setup_browser():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    # تثبيت ChromeDriver تلقائيًا عبر webdriver-manager
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    # تحديد المسار الصحيح لـ ChromeDriver
+    service = Service("/usr/bin/chromedriver")
+
+    driver = webdriver.Chrome(service=service, options=options)
     return driver
 
 # تسجيل الدخول إلى إنستغرام
