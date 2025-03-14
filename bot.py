@@ -11,15 +11,21 @@ from keep_alive import keep_alive  # تشغيل `keep_alive.py` لمنع الت�
 # تشغيل السيرفر للحفاظ على البوت شغالًا
 keep_alive()
 
-# تثبيت Google Chrome و ChromeDriver يدويًا
+# تثبيت Google Chrome و ChromeDriver والعثور على المسار الصحيح تلقائيًا
 def install_chrome():
-    """تثبيت Google Chrome و ChromeDriver داخل Railway"""
+    """تثبيت Google Chrome و ChromeDriver داخل Railway والعثور على المسار الصحيح"""
     subprocess.run("apt update -y", shell=True)
     subprocess.run("apt install -y chromium-browser", shell=True)
     subprocess.run("apt install -y chromium-chromedriver", shell=True)
-    print("✅ تم تثبيت Google Chrome و ChromeDriver بنجاح!")
 
-install_chrome()
+    # العثور على المسار الفعلي لـ ChromeDriver
+    chrome_driver_path = subprocess.run("which chromedriver", shell=True, capture_output=True, text=True).stdout.strip()
+    
+    if not chrome_driver_path:
+        raise FileNotFoundError("⚠️ لم يتم العثور على ChromeDriver في النظام!")
+
+    print(f"✅ تم العثور على ChromeDriver في: {chrome_driver_path}")
+    return chrome_driver_path
 
 # إعداد Selenium لاستخدام ChromeDriver الصحيح
 def setup_browser():
@@ -31,10 +37,8 @@ def setup_browser():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    # التأكد من أن ChromeDriver يمكن الوصول إليه
-    driver_path = "/usr/bin/chromedriver"
-    if not os.path.exists(driver_path):
-        raise FileNotFoundError(f"⚠️ لم يتم العثور على ChromeDriver في: {driver_path}")
+    # استدعاء install_chrome() للحصول على المسار الصحيح
+    driver_path = install_chrome()
 
     service = Service(driver_path)
     driver = webdriver.Chrome(service=service, options=options)
