@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import os
 import subprocess
+from keep_alive import keep_alive
+keep_alive()
 
 # تثبيت Google Chrome و ChromeDriver في بيئة Railway
 def install_chrome():
