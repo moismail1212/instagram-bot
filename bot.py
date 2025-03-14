@@ -6,6 +6,15 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import os
 import subprocess
+import subprocess
+
+def install_chrome():
+    """تثبيت Google Chrome و ChromeDriver في بيئة Railway"""
+    subprocess.run("apt update", shell=True)
+    subprocess.run("apt install -y chromium-chromedriver", shell=True)
+    print("✅ تم تثبيت Google Chrome و ChromeDriver بنجاح!")
+
+install_chrome()
 from keep_alive import keep_alive
 keep_alive()
 
@@ -18,7 +27,21 @@ def install_chrome():
 install_chrome()
 
 # إعداد المتصفح
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
 def setup_browser():
+    """إعداد متصفح Chrome داخل Railway"""
+    options = Options()
+    options.binary_location = "/usr/bin/chromium-browser"  # تحديد مسار Google Chrome
+    options.add_argument("--headless")  # تشغيل بدون واجهة مرئية
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
+    return driver
     options = webdriver.ChromeOptions()
     options.binary_location = "/usr/bin/chromium-browser"  # تحديد موقع Chrome داخل بيئة Railway
     options.add_argument("--headless")  # تشغيل بدون واجهة مرئية
