@@ -31,9 +31,12 @@ def setup_browser():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    # تحديد المسار الصحيح لـ ChromeDriver
-    service = Service("/usr/bin/chromedriver")
+    # التأكد من أن ChromeDriver يمكن الوصول إليه
+    driver_path = "/usr/bin/chromedriver"
+    if not os.path.exists(driver_path):
+        raise FileNotFoundError(f"⚠️ لم يتم العثور على ChromeDriver في: {driver_path}")
 
+    service = Service(driver_path)
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
